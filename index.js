@@ -1,7 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
+const path = require('path');
 global.__root   = __dirname + '/';
+
 
 // Importar las rutas de los productos
 const app = express();
@@ -24,7 +25,24 @@ app.get('/api', function (req, res) {
 });
 
 var AuthController = require('./auth/AuthController');
+const verifyToken = require('./auth/VerifyToken');
 app.use('/api/auth', AuthController);
+
+// Middleware para parsear datos de formularios
+app.use(express.urlencoded({ extended: true }));
+
+// Configuración para servir archivos estáticos
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Ruta para servir el formulario de login
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'login.html'));
+});
+
+// Ruta para servir el dashboard de admin
+app.get('/dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'dashboard.html'));
+});
 
 let port = 3500;
 app.listen(port, () => {
