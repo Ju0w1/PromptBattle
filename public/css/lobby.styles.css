@@ -1,0 +1,96 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e0e7ff;
+    margin: 0;
+    padding: 20px;
+}
+
+header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+h3{
+    margin-right: 30px;
+    font-size: 16px;
+    color: #333;
+}
+
+.top-right{
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    width: 40%;
+}
+
+.red-button{
+    margin-bottom: 0 !important;
+    width: 40%;
+}
+
+/* Contenedor principal */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Título de la página */
+.container h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: left;
+}
+
+/* Contenedor de la grilla */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+/* Estilos de las tarjetas */
+.card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+}
+
+/* Contenido de la tarjeta */
+.card-content {
+    margin-bottom: 10px;
+}
+
+/* Estilo del botón Jugar */
+.play-button {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.play-button:hover {
+    background-color: #218838;
+}
+
+/* Ajuste de grilla a 2 columnas cuando el ancho de las tarjetas es menor a 200px */
+@media (max-width: 1000px) {
+    .grid-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Ajuste de grilla a 1 columna cuando el ancho de las tarjetas es aún menor */
+@media (max-width: 600px) {
+    .grid-container {
+        grid-template-columns: 1fr;
+    }
+}

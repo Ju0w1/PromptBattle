@@ -34,8 +34,18 @@ app.use(express.urlencoded({ extended: true }));
 // Configuración para servir archivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Ruta para servir el formulario de login
+// Ruta para servir el inicio
 app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'inicio.html'));
+});
+
+// Ruta para servir el lobby
+app.get('/lobby', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'lobby.html'));
+});
+
+// Ruta para servir el formulario de login
+app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'login.html'));
 });
 

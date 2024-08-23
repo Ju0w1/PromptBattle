@@ -42,14 +42,11 @@ router.post('/register', async function(req, res) {
 
 router.get('/user', VerifyToken, async function(req, res) {
     try{
-        console.log(req.userId)
         const user = await User.findById(req.userId,{ contrasenia: 0 })
 
         if (!user) return res.status(404).send("No existe el usuario.");
 
-        console.log(user)
         res.status(200).send(user);
-
     }catch (err){
         return res.status(500).send("Error al encontrar usuario.");
     }
@@ -66,25 +63,9 @@ router.post('/login', async function(req, res) {
 		var token = jwt.sign({ id: user._id }, config.secret, {
 			expiresIn: 86400 // expira en 24 hours
 		});
-
-        res.cookie('token',token, {httpOnly: true})
         
         res.status(200).send({ auth: true, token: token });
 
-        // res.writeHead(200, {
-        //     "Set-Cookie": `token=${token}; HttpOnly`,
-        //     "Access-Control-Allow-Credentials": "true"
-        // }).send();
-
-        // Establecer el token en una cookie HttpOnly
-        // res.cookie('authToken', token, { 
-        //     httpOnly: true, 
-        //     secure: true, // Usar solo en HTTPS
-        //     sameSite: 'strict',
-        //     maxAge: 24 * 60 * 60 * 1000 // 24 horas
-        // });
-        
-		// res.status(200).send({ auth: true, message: 'Login existoso' });
     }catch(err){
         res.status(401).json({ auth: false, message: "Credenciales incorrectas" });
     }

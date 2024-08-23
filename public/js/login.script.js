@@ -17,12 +17,12 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
 
         if (response.status === 200 && data.auth) {
             localStorage.setItem('token', data.token);
-            alert('Inicio de sesión exitoso');
+
             window.location.href = '/dashboard';
         } else {
-            alert('Error en las credenciales');
+            console.log('Error en las credenciales');
         }
     } catch (err) {
-        alert('Error en la solicitud: ' + err.message);
+        console.log('Error en la solicitud: ' + err.message);
     }
 });
