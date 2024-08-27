@@ -5,6 +5,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('welcome-message').textContent = `Bienvenido ${name}`;
 
+    window.onload = () => {
+        var socket = io();
+
+        socket.emit('send-username', name);
+    }
+
 });
 
 document.getElementById('logoutButton').addEventListener('click', async function() {

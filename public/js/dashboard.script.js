@@ -39,3 +39,16 @@ document.getElementById('logoutButton').addEventListener('click', async function
         console.log('Error al cerrar sesión')
     }
 });
+
+document.getElementById('cargarTemas').addEventListener('click', async function() {
+    try {
+        const token = localStorage.getItem('token');
+
+        if(!token) window.location.href = '/login';
+
+        window.location.href = '/dashboard/cargartemas';
+    } catch (err) {
+        console.log('Error al cerrar sesión')
+    }
+});
+

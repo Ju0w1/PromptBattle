@@ -1,0 +1,38 @@
+
+
+/* Estilos del formulario */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* Estilos del select */
+select {
+    padding: 12px;
+    font-size: 14px;
+    border-radius: 8px;
+    width: 50%;
+    color: #374151;
+    background-color: #f9fafb;
+    border: 1px solid #cbd5e1;
+}
+
+
+label {
+    font-weight: 600;
+    color: #4b5563;
+}
+
+/* Contenedor de resultados */
+.result-container {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #e9ecef;
+    border-radius: 4px;
+    text-align: center;
+}

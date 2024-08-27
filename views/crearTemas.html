@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cargar temas</title>
+    <link rel="stylesheet" href="/css/global.styles.css">
+    <link rel="stylesheet" href="/css/crearTemas.styles.css">
+</head>
+<body>
+    <div class="body-style">
+        <main class="main-container">
+            <div><h2>Crear tema</h2></div>
+            <form id="selectionForm">
+                <div class="form-group">
+                    <label for="options">Elige una categoría:</label>
+                    <select id="options" name="options">
+                        <option value="HISTORIA">HISTORIA</option>
+                        <option value="VIDEOJUEGOS">VIDEOJUEGOS</option>
+                        <option value="ARTE">ARTE</option>
+                    </select>
+                </div>
+                <button type="submit" class="blue-button">Generar con IA</button>
+            </form>
+    
+            <div id="result" class="result-container">
+                <!-- Aquí se mostrará el resultado -->
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/crearTemas.script.js"></script>
+</body>
+</html>
