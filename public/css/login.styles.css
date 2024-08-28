@@ -35,3 +35,7 @@ input[type="email"]:focus, input[type="password"]:focus {
         font-size: 20px;
     }
 }
+
+.main-container{
+    width: 30vw;
+}

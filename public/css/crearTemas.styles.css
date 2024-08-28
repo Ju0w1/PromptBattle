@@ -1,4 +1,7 @@
 
+.main-container{
+    width: 60vw;
+}
 
 /* Estilos del formulario */
 form {
@@ -35,4 +38,25 @@ label {
     background-color: #e9ecef;
     border-radius: 4px;
     text-align: center;
+}
+
+.tema-box{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 12px;
+    border: 1px solid #cbd5e1;
+}
+
+.buttons-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.buttons-container button{
+    margin-bottom: 0;
+    border: 1px solid #cbd5e1;
 }

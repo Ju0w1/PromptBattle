@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 var TareaSchema = new Schema({
 	_id: mongoose.Schema.Types.ObjectId,
 	descripcion: {type: String, required: true, max: 200},
-    tipo: {type: String, required: true, enum: ['Historia','Geografia','Arte','Videojuegos']},
+    tipo: {type: String, required: true, enum: ['HISTORIA','GEOGRAFIA','ARTE','VIDEJUEGOS','CINE','DEPORTES']},
 });
 
 

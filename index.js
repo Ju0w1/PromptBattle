@@ -50,7 +50,7 @@ app.use('/api/auth', AuthController);
 ////////////////////////////// 
 
 var TemasController = require('./controllers/TemasController');
-app.use('/temas', TemasController);
+app.use('/temas', verifyToken, TemasController);
 
 
 // Middleware para parsear datos de formularios
