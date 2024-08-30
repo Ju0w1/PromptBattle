@@ -11,13 +11,19 @@ document.getElementById('selectionForm').addEventListener('submit', function(e) 
 
     const bodyData = new URLSearchParams({ categoria: selectedOption });
 
+    const token = localStorage.getItem('token');
     const options = {
         method: 'POST',
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'x-access-token':token
+        },
         body: bodyData.toString()
       };
 
-      
+    const loader = document.getElementById('loader') 
+    loader.style.display = 'block';
+    
     fetch('/temas/crear', options)
       .then(response => response.json())
       .then(response => {
@@ -59,9 +65,28 @@ document.getElementById('selectionForm').addEventListener('submit', function(e) 
           resultContainer.appendChild(newDiv)
 
 
-          checkButton.addEventListener('click', function() {
-            const pValue = this.closest('.tema-box').querySelector('p').textContent
-            console.log(pValue)
+          checkButton.addEventListener('click', async function() {
+            const texto = this.closest('.tema-box').querySelector('p').textContent
+            const select = document.getElementById("options");
+            const categoria = select.value
+
+            const bodyData = new URLSearchParams({ texto: texto, categoria: categoria });
+
+            const response = await fetch('/temas/guardar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'x-access-token':token
+                },
+                body: bodyData.toString(),
+            });
+        
+            if (response.status === 200) {
+              const div = this.closest('.tema-box')
+              div.remove()
+            } else {
+              console.log('Error al guardar tema');
+            }
           })
 
           cancelButton.addEventListener('click', function() {
@@ -71,7 +96,12 @@ document.getElementById('selectionForm').addEventListener('submit', function(e) 
         });
         
       })
-      .catch(err => console.error(err));
+      .catch(err => console.error(err))
+      .finally(()=>{
+        const resultContainer = document.getElementById('result')
+        loader.style.display = 'none';
+        resultContainer.style.display = 'block';
+      })
 });
 
 

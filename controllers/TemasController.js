@@ -4,6 +4,7 @@ var router = express.Router();
 var bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
+var Tema = require('../models/tema.model');
 
 router.post('/crear', async function(req, res) {
   try {
@@ -53,16 +54,15 @@ router.post('/crear', async function(req, res) {
           // console.log(texto)
 
           // Remover texto innecesario al principio y al final
-          // const cleanText = texto.replace(/\n/g, '');
           const cleanResponse = texto.match(/Topico\s\d+:\s[\s\S]*?(?=(\n|Topico\s\d+:|$))/g)
-                                  .map(match => match.replace(/Topico\s\d+:\s/, '').trim())
-          
-          cleanResponse.forEach(element => {
-            console.log(element)
-          });
-          console.log(cleanResponse)
-          
-          res.status(200).send({ auth: true, temas: cleanResponse});
+          let cleanerResponse
+          if(cleanResponse.length > 0){
+            cleanerResponse = cleanResponse.map(match => match.replace(/Topico\s\d+:\s/, '').trim())
+          }else{
+            cleanerResponse = cleanResponse
+          }
+
+          res.status(200).send({ auth: true, temas: cleanerResponse});
         })
         .catch(err => console.error(err));
       
@@ -72,7 +72,53 @@ router.post('/crear', async function(req, res) {
 });
 
 router.post('/guardar', async function(req, res) {
-  
+  try{
+    const texto = req.body.texto;
+    const tipo = req.body.categoria;
+
+    Tema.findOne({ descripcion: texto })
+      .then( async function (tema) {
+        if(tema){
+          res.status(500).send({message:'Ya existe ese tema'});
+        }else{
+          const newTema = new Tema({
+            _id: new mongoose.Types.ObjectId(),
+              descripcion : texto,
+              tipo : tipo
+          })
+          
+          await newTema.save()
+          res.status(200).send()
+        }
+      })
+    
+  }catch (err) {
+    res.status(500).send("Error al guardar tema"+err)
+    console.log(err)
+}
+})
+
+router.get('/lista', async function(req, res) {
+  try{
+    const texto = req.body.texto;
+    const tipo = req.body.categoria;
+
+    console.log(texto)
+    console.log(tipo)
+
+    const newTema = new Tema({
+        _id: new mongoose.Types.ObjectId(),
+        descripcion : texto,
+        tipo : tipo
+    });
+
+    await newTema.save();
+
+    res.status(200).send();
+  }catch (err) {
+    res.status(500).send("Error al guardar tema"+err)
+    console.log(err)
+}
 })
 
 module.exports = router;
