@@ -5,8 +5,9 @@ var bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 var Tema = require('../models/tema.model');
+const verifyToken = require('../auth/VerifyToken');
 
-router.post('/crear', async function(req, res) {
+router.post('/crear',verifyToken, async function(req, res) {
   try {
       const categoria = req.body.categoria;
       
@@ -71,7 +72,7 @@ router.post('/crear', async function(req, res) {
   }
 });
 
-router.post('/guardar', async function(req, res) {
+router.post('/guardar',verifyToken, async function(req, res) {
   try{
     const texto = req.body.texto;
     const tipo = req.body.categoria;
@@ -100,21 +101,9 @@ router.post('/guardar', async function(req, res) {
 
 router.get('/lista', async function(req, res) {
   try{
-    const texto = req.body.texto;
-    const tipo = req.body.categoria;
-
-    console.log(texto)
-    console.log(tipo)
-
-    const newTema = new Tema({
-        _id: new mongoose.Types.ObjectId(),
-        descripcion : texto,
-        tipo : tipo
-    });
-
-    await newTema.save();
-
-    res.status(200).send();
+    const temas = await Tema.find({},{ _id: 0 })
+    
+    res.status(200).send(temas);
   }catch (err) {
     res.status(500).send("Error al guardar tema"+err)
     console.log(err)

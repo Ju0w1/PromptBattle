@@ -50,7 +50,7 @@ app.use('/api/auth', AuthController);
 ////////////////////////////// 
 
 var TemasController = require('./controllers/TemasController');
-app.use('/temas', verifyToken, TemasController);
+app.use('/temas', TemasController);
 
 
 // Middleware para parsear datos de formularios
@@ -79,9 +79,14 @@ app.get('/dashboard', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'dashboard.html'));
 });
 
-// Ruta para servir el dashboard de admin
+// Ruta para servir la carga de temas para admin
 app.get('/dashboard/cargartemas', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'crearTemas.html'));
+});
+
+// Ruta para servir la partida del jugador
+app.get('/partida', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'partida.html'));
 });
 
 let port = 3500;
@@ -89,78 +94,4 @@ server.listen(port, () => {
 	console.log('Servidor arriba');
 });
 
-const users = []
-
-io.on('connection', (socket) => {
-
-    socket.on('send-username', function(username) {
-        let user = socket.handshake.session.user;
-
-        if (!user) {
-            user = addUser(username);
-            socket.handshake.session.user = user;
-            socket.handshake.session.save();
-
-            console.log(`${user.name} se conecto`);
-        }
-
-
-    });
-
-    socket.on('disconnect', () => {
-        try{
-            const username = socket.handshake.session.user.name
-
-            console.log(`${username} se desconecto`);
-        }catch(err){
-            console.log(err)
-        }
-        
-        
-    });
-
-    // console.log('Se conecto un usuario: ', socket.handshake.query.username);
-
-    // if (!user) {
-    //     user = addUser();
-    //     socket.handshake.session.user = user;
-    //     socket.handshake.session.save();
-    // }
-
-    // socket.userName = user.name;
-    // socket.emit("welcome", user);
-
-    // socket.on('disconnect', () => {
-    //     removeUser(user);
-    // });
-
-    // socket.on("click", () => {
-    //     handleUserClick(user);
-    // });
-
-    // socket.on("restart", resetGame);
-});
-
-function addUser(username) {
-    const user = {
-        name: username,
-    };
-    users.push(user);
-    // updateUsers();
-    return user;
-}
-
-// function updateUsers() {
-//     const clicks = users.reduce((sum, u) => sum + u.clicks, 0);
-//     const progress = `${(clicks / 30) * 100}%`;
-//     const ganador = users.find(u => u.ganador)?.name || '';
-
-//     const userList = users.map(u => `${u.name} <small>(${u.clicks} clicks)</small>`).join(', ');
-
-//     io.emit("users", {
-//         users: userList,
-//         clicks,
-//         progress,
-//         ganador: ganador ? `${ganador} ganó` : ''
-//     });
-// }
+require("./websocket/socket")(io)
