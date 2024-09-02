@@ -50,7 +50,9 @@ app.use('/api/auth', AuthController);
 ////////////////////////////// 
 
 var TemasController = require('./controllers/TemasController');
+var PartidasController = require('./controllers/PartidasController');
 app.use('/temas', TemasController);
+app.use('/partidas', PartidasController);
 
 
 // Middleware para parsear datos de formularios
@@ -94,4 +96,108 @@ server.listen(port, () => {
 	console.log('Servidor arriba');
 });
 
-require("./websocket/socket")(io)
+const users = []
+const rooms = []
+
+io.on('connection', (socket) => {
+        
+    socket.on('send-username', function(username) {
+
+        let user = socket.handshake.session.user;
+        
+        if (!user) {
+            const newUser = {
+                username,
+            };
+            user = addUser(newUser);
+            socket.handshake.session.user = user;
+            socket.handshake.session.save();
+
+            console.log("handshake: ",socket.handshake.session)
+            console.log("este es el socketID: ",socket.id)
+            console.log("usuarios: ",users)
+            console.log(`${user.name} se conecto`);
+        }
+    });
+
+    socket.on('disconnect', () => {
+        try{
+            const username = socket.handshake.session.user.name
+
+            console.log(`${username} se desconecto`);
+        }catch(err){
+            console.log(err)
+        }
+    });
+
+    socket.on('join-room', (datos) => {
+        try {
+            let roomData = {}
+            let roomUsers = []
+
+            const username = socket.handshake.session.user.name;
+
+            socket.join(datos.room);
+
+            roomUsers.push({username, id: socket.id});
+
+            roomData = {
+                room: datos.room,
+                tema: datos.tema,
+                users: roomUsers
+            }
+
+            rooms.push(roomData);
+
+            // Enviar el mensaje a todos los usuarios del room
+            io.to(datos.room).emit('user-joined-room', username);
+
+        } catch (err) {
+            console.log(err);
+        }
+    });
+
+    socket.on('restoreSession', ({ storedSocketId }) => {
+        try {
+            console.log('rooms connected: ', socket.rooms)
+            console.log("socket restored: ", storedSocketId)
+            const socketId = storedSocketId;
+            const roomInfo = rooms.find(room => room.users.some(user => user.id === socketId));
+
+            console.log("restored room info:", roomInfo)
+            if (roomInfo) {
+                io.to(roomInfo.room).emit('room-info-players', roomInfo);
+            } else {
+                io.to(roomInfo.room).emit('room-info-players', { message: 'Room not found' });
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    });
+
+    socket.on('room-info', (datos) => {
+        try {
+            const theRoom = datos.room;
+
+            const roomInfo = rooms.find(room => room.room === theRoom);
+
+            console.log(roomInfo)
+
+            if (roomInfo) {
+                io.to(roomInfo.room).emit('room-info-players', roomInfo);
+            } else {
+                io.to(roomInfo.room).emit('room-info-players', { message: 'Room not found' });
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    });
+});
+
+function addUser(newUser) {
+    const user = {
+        name: newUser.username,
+    };
+    users.push(user);
+    return user;
+}

@@ -4,14 +4,22 @@ var router = express.Router();
 var bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
+const url = require('url');
 
-router.get('/lista', async function(req, res) {
+router.post('/acceso', async function(req, res) {
     try{
-      const temas = await Tema.find({},{ _id: 0 })
+      const tema = req.body.tema;
       
-      res.status(200).send(temas);
+      res.redirect(url.format({
+        pathname: '/partida',
+        query: {
+          tema: tema
+        }
+      }))
     }catch (err) {
       res.status(500).send("Error al guardar tema"+err)
       console.log(err)
   }
-  })
+})
+
+module.exports = router;

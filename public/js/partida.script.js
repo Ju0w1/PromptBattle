@@ -7,13 +7,14 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     socket.emit('send-username', name);
 
-    // Escuchar cuando un usuario se une al room
-    socket.on('user-joined-room', (data) => {
-        console.log(data);
-    });
-
-    // Recibir el mensaje al unirse
-    socket.emit('room-info', {room: "room1"});
+    // socket.on('connect', () => {
+    //     const storedSocketId = localStorage.getItem('socketId');
+    //     console.log(storedSocketId)
+    //     if (storedSocketId) {
+    //         // Emitir un evento al servidor para restaurar la sesión
+    //         socket.emit('restoreSession', { storedSocketId });
+    //     }
+    // });
 
     socket.on('room-info-players', (data) => {
         console.log(data);

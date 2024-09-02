@@ -4,9 +4,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     if(!name) window.location.href = '/';
 
     document.getElementById('welcome-message').textContent = `Bienvenido ${name}`;
-    
-    var socket = io();
-    socket.emit('send-username', name);
 
     try {
         const response = await fetch('/temas/lista', {
@@ -36,13 +33,22 @@ document.addEventListener('DOMContentLoaded', async function() {
             
             document.getElementById('play').addEventListener('click', async function() {
                 const tema = this.closest('.card-content').querySelector('p').textContent
-                
-                socket.emit("join-room", {room: "room1", tema});
+                const bodyData = new URLSearchParams({ tema });
 
-                window.location.href = `/partida`;
+                try {
+                    const response = await fetch('/partidas/acceso', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: bodyData.toString()
+                    });
+                } catch (err) {
+                    console.log('Error en la solicitud: ' + err.message);
+                }
             });
         } else {
-            console.log('Error en las credenciales');
+            console.log('Error al intentar acceder');
         }
     } catch (err) {
         console.log('Error en la solicitud: ' + err.message);
