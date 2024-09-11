@@ -96,108 +96,113 @@ server.listen(port, () => {
 	console.log('Servidor arriba');
 });
 
-const users = []
+const users = new Map()
 const rooms = []
 
 io.on('connection', (socket) => {
-        
-    socket.on('send-username', function(username) {
 
-        let user = socket.handshake.session.user;
-        
-        if (!user) {
+    console.log('Socket conectado: ', socket.id);
+
+    socket.on('send-username', (username) => {
+        if (users.has(username)) {
+            console.log(`El usuario ${username} ya está conectado`);
+            users.get(username).socketId = socket.id
+            return;
+        }else{
             const newUser = {
                 username,
+                socketId: socket.id
             };
-            user = addUser(newUser);
-            socket.handshake.session.user = user;
-            socket.handshake.session.save();
+            addUser(newUser);
 
-            console.log("handshake: ",socket.handshake.session)
-            console.log("este es el socketID: ",socket.id)
-            console.log("usuarios: ",users)
-            console.log(`${user.name} se conecto`);
+            console.log(`${newUser.username} se conectó con socket ID: ${newUser.socketId}`);
+
         }
     });
 
-    socket.on('disconnect', () => {
-        try{
-            const username = socket.handshake.session.user.name
+    socket.on('obtener-datos-partida', () => {
+        // console.log('Rooms de send-username: ',rooms.length)
+        if(rooms.length>0){
+            rooms.forEach(element => {
+                // console.log(element)
+                io.sockets.emit('actualizo-cantidad-players', { idPartida: element.id, cantidad: element.usuarios.length });
+            });
+        }
+    })
 
-            console.log(`${username} se desconecto`);
-        }catch(err){
-            console.log(err)
+    // Manejar el ingreso a una partida
+    socket.on('ingresar-partida', (data) => {
+
+        console.log(`${new Date()} - Se solicita ingreso a partida con esta data: `, data)
+
+        const username = data.username;
+        if (username && users.has(username)) {
+            // console.log(`El usuario ${username} ingresó a la partida ${data.idPartida}`);
+
+            const index = rooms.findIndex(element => Number(element.id) === Number(data.idPartida));
+
+            const object = rooms[index]
+
+            if(object) {
+                if(object.usuarios.length >= 2){
+                    socket.emit('partida-completa', { message: 'Esta partida alcanzo el maximo de jugadores.' });
+                        
+                    console.log(`${new Date()} - La cantidad de usuarios superan el maximo por lo que se emite partida-completa`)
+                }else{
+                    object.usuarios.push(users.get(username)) 
+                    rooms[index] = object
+
+                    socket.join(`room${object.id}`)
+
+                    io.to(`room${object.id}`).emit("nuevo-integrante");
+
+                    console.log(`${new Date()} - No esta completa la lista, se agrega el usuario a la lista del room`)
+                }
+            }else{
+                console.log(`${new Date()} - No existe room, se procede a crearlo`)
+                const usuarios = []
+                usuarios.push(users.get(username))
+                const room = {
+                    tema: data.tema,
+                    usuarios,
+                    id: Number(data.idPartida)
+                }
+                rooms.push(room)
+
+                io.to(`room${room.id}`).emit("nuevo-integrante");
+
+                console.log(`${new Date()} - Room creado`)
+            }    
+
+            rooms.forEach(element => {
+                if(Number(element.id) === Number(data.idPartida)){
+                    socket.emit('info-partida',  element );
+                }
+
+                console.log(`Room ${element.id}`, element)
+
+                io.sockets.emit('actualizo-cantidad-players', { idPartida: element.id, cantidad: element.usuarios.length });
+            })
+
+        } else {
+            console.log(`El usuario ${username} no está registrado.`);
+            socket.emit('error-ingreso-partida', { message: 'Usuario no registrado.' });
         }
     });
 
-    socket.on('join-room', (datos) => {
-        try {
-            let roomData = {}
-            let roomUsers = []
+    socket.on('desconectar', (username) =>{
+        users.delete(username)
+        socket.disconnect()
+    })
 
-            const username = socket.handshake.session.user.name;
-
-            socket.join(datos.room);
-
-            roomUsers.push({username, id: socket.id});
-
-            roomData = {
-                room: datos.room,
-                tema: datos.tema,
-                users: roomUsers
-            }
-
-            rooms.push(roomData);
-
-            // Enviar el mensaje a todos los usuarios del room
-            io.to(datos.room).emit('user-joined-room', username);
-
-        } catch (err) {
-            console.log(err);
-        }
-    });
-
-    socket.on('restoreSession', ({ storedSocketId }) => {
-        try {
-            console.log('rooms connected: ', socket.rooms)
-            console.log("socket restored: ", storedSocketId)
-            const socketId = storedSocketId;
-            const roomInfo = rooms.find(room => room.users.some(user => user.id === socketId));
-
-            console.log("restored room info:", roomInfo)
-            if (roomInfo) {
-                io.to(roomInfo.room).emit('room-info-players', roomInfo);
-            } else {
-                io.to(roomInfo.room).emit('room-info-players', { message: 'Room not found' });
-            }
-        } catch (err) {
-            console.log(err);
-        }
-    });
-
-    socket.on('room-info', (datos) => {
-        try {
-            const theRoom = datos.room;
-
-            const roomInfo = rooms.find(room => room.room === theRoom);
-
-            console.log(roomInfo)
-
-            if (roomInfo) {
-                io.to(roomInfo.room).emit('room-info-players', roomInfo);
-            } else {
-                io.to(roomInfo.room).emit('room-info-players', { message: 'Room not found' });
-            }
-        } catch (err) {
-            console.log(err);
-        }
-    });
 });
 
+// Función para agregar un usuario al mapa de usuarios
 function addUser(newUser) {
     const user = {
-        name: newUser.username,
+        username: newUser.username,
+        socketId: newUser.socketId
     };
-    users.push(user);
+    users.set(user.username, user); // Usar el username como clave
     return user;
 }
