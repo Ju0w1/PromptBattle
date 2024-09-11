@@ -176,7 +176,8 @@ io.on('connection', (socket) => {
 
             rooms.forEach(element => {
                 if(Number(element.id) === Number(data.idPartida)){
-                    socket.emit('info-partida',  element );
+                    // socket.emit('info-partida',  element );
+                    io.to(`room${object.id}`).emit('info-partida',  element);
                 }
 
                 console.log(`Room ${element.id}`, element)
