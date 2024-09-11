@@ -13,12 +13,17 @@
         <h2>Partida</h2>
     </header>
     <main>
-        <div class="image-container">
-            <img src="#" alt="Imagen generada por IA">
+        <h3 id="tema"></h3>
+        <div class="loader-container" >
+            <div id="loader" class="loader" style="display: none;"></div>
+        </div>
+        <div class="image-container" id="result" style="display: none;">
+            <img id="imagen" src="#" alt="Imagen generada por IA">
         </div>
         <div class="input-container">
-            <input type="text" placeholder="Escribe tu texto aquí">
+            <input id="texto" type="text" placeholder="Escribe tu texto aquí">
         </div>
+        <button id="submit" class="submit-button">Enviar</button>
     </main>
     <script src="/js/partida.script.js"></script>
 </body>

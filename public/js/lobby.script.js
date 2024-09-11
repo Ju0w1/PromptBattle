@@ -1,7 +1,11 @@
 document.addEventListener('DOMContentLoaded', async function() {
-    const name = localStorage.getItem('username');
+    const name = sessionStorage.getItem('username');
 
     if(!name) window.location.href = '/';
+
+    var socket = io();
+
+    socket.emit('send-username', name);
 
     document.getElementById('welcome-message').textContent = `Bienvenido ${name}`;
 
@@ -16,47 +20,56 @@ document.addEventListener('DOMContentLoaded', async function() {
         const data = await response.json();
 
         if (response.status === 200 ) {
-            console.log(data)
+            // console.log(data)
             const gridContainer = document.getElementById('grid-container');
             gridContainer.innerHTML = '';
-            data.forEach(tema => {
+            data.forEach((tema, index) => {
                 gridContainer.innerHTML += `
                 <div class="card">
                     <div class="card-content">
                         <p>${tema.descripcion}</p>
                         <p><b>${tema.tipo}</b> </p> 
-                        <button id="play" class="play-button">Jugar</button>
+                        <p id="${index}">Battlers: <b>0/2</b></p>
+                        <button data-key="${index}" id="play" class="play-button">Jugar</button>
                     </div>
                 </div>
                 `
             });
-            
-            document.getElementById('play').addEventListener('click', async function() {
-                const tema = this.closest('.card-content').querySelector('p').textContent
-                const bodyData = new URLSearchParams({ tema });
 
-                try {
-                    const response = await fetch('/partidas/acceso', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: bodyData.toString()
-                    });
-                } catch (err) {
-                    console.log('Error en la solicitud: ' + err.message);
-                }
+            const playButtons = document.querySelectorAll('.play-button');
+
+            playButtons.forEach(button => {
+                button.addEventListener('click', function(){
+                    const tema = this.closest('.card-content').querySelector('p').textContent
+                    const idPartida = this.getAttribute('data-key')
+                    sessionStorage.setItem('temaPartida', tema);
+                    sessionStorage.setItem('idPartida', Number(idPartida));
+                    window.location.href = '/partida';
+                });
             });
+            
         } else {
             console.log('Error al intentar acceder');
         }
     } catch (err) {
         console.log('Error en la solicitud: ' + err.message);
     }
+
+    socket.emit('obtener-datos-partida');
+
+    socket.on('actualizo-cantidad-players', (partida)=>{
+        console.log('Partida recibida: ', partida)
+
+        const players = document.getElementById(partida.idPartida).querySelector('b')
+        players.textContent = `${partida.cantidad}/2`
+    })
+
+    document.getElementById('logoutButton').addEventListener('click', async function() {
+        socket.emit('desconectar', name)
+        localStorage.removeItem('username');
+        window.location.href = '/';
+    });
 });
 
-document.getElementById('logoutButton').addEventListener('click', async function() {
-    localStorage.removeItem('username');
-    window.location.href = '/';
-});
+
 

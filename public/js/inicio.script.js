@@ -3,10 +3,8 @@ document.getElementById('gameForm').addEventListener('submit', async function(e)
 
     const name = document.getElementById('name').value;
 
-    console.log(name)
-
     if(name){
-        localStorage.setItem('username', name);
+        sessionStorage.setItem('username', name);
         window.location.href = '/lobby';
     }else{
         window.location.href = '/';
