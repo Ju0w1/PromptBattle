@@ -18,7 +18,10 @@ document.addEventListener('DOMContentLoaded', async function() {
     })
 
     socket.on('actualizo-cantidad-players', (datos)=>{
-        console.log(datos)
+        if(Number(datos.idPartida) === idPartida){
+            const players = document.getElementById('players-count')
+            players.textContent = `Battlers en la sala: ${datos.cantidad}`;
+        }
     })  
 
     socket.on('nuevo-integrante', ()=>{

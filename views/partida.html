@@ -14,16 +14,29 @@
     </header>
     <main>
         <h3 id="tema"></h3>
-        <div class="loader-container" >
+
+        <div id="players-count-container"></div>
+            <p id="players-count">Battlers en la sala: 0</p>
+        </div>
+
+        <!-- Botón de "Listo" -->
+        <div id="ready-container">
+            <button id="ready-button" class="submit-button">Listo</button>
+        </div>
+
+        <!-- Loader o imagen generada por IA -->
+        <div class="loader-container"></div>
             <div id="loader" class="loader" style="display: none;"></div>
         </div>
         <div class="image-container" id="result" style="display: none;">
             <img id="imagen" src="#" alt="Imagen generada por IA">
         </div>
-        <div class="input-container">
+
+        <!-- Input y botón Enviar (Ocultos al inicio) -->
+        <div class="input-container" id="input-container" style="display: none;">
             <input id="texto" type="text" placeholder="Escribe tu texto aquí">
         </div>
-        <button id="submit" class="submit-button">Enviar</button>
+        <button id="submit" class="submit-button" style="display: none;">Enviar</button>
     </main>
     <script src="/js/partida.script.js"></script>
 </body>

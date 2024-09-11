@@ -38,14 +38,16 @@ document.addEventListener('DOMContentLoaded', async function() {
 
             const playButtons = document.querySelectorAll('.play-button');
 
+            function handlePlayButtonClick() {
+                const tema = this.closest('.card-content').querySelector('p').textContent;
+                const idPartida = this.getAttribute('data-key');
+                sessionStorage.setItem('temaPartida', tema);
+                sessionStorage.setItem('idPartida', Number(idPartida));
+                window.location.href = '/partida';
+            }
+
             playButtons.forEach(button => {
-                button.addEventListener('click', function(){
-                    const tema = this.closest('.card-content').querySelector('p').textContent
-                    const idPartida = this.getAttribute('data-key')
-                    sessionStorage.setItem('temaPartida', tema);
-                    sessionStorage.setItem('idPartida', Number(idPartida));
-                    window.location.href = '/partida';
-                });
+                button.addEventListener('click', handlePlayButtonClick);
             });
             
         } else {
@@ -62,6 +64,21 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         const players = document.getElementById(partida.idPartida).querySelector('b')
         players.textContent = `${partida.cantidad}/2`
+
+        if(Number(partida.cantidad) === 2){
+            const playButtons = document.querySelectorAll('.play-button');
+            
+            playButtons.forEach(button => {
+
+                if(Number(button.getAttribute('data-key')) === partida.idPartida){
+                    button.removeEventListener('click', handlePlayButtonClick)
+                    button.classList.remove('play-button')
+                    button.classList.add('disable-button')
+                    button.getAttribute === true ? null : button.setAttribute('disabled', true)
+                }
+
+            });
+        }
     })
 
     document.getElementById('logoutButton').addEventListener('click', async function() {
