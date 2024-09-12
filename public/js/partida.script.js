@@ -31,7 +31,23 @@ document.addEventListener('DOMContentLoaded', async function() {
     socket.on('info-partida', (partida)=>{
         const tema = document.getElementById("tema")
         tema.textContent = partida.tema
+
+        const cantidadPlayers = document.getElementById("players-count")
+        cantidadPlayers.textContent = `Battlers en la sala: ${partida.usuarios.length}`
     })
+
+    const readyButton = document.getElementById('ready-button')
+
+    function handleReadyButtonClick() {
+        socket.emit('player-ready', {username: name, idPartida});
+
+        readyButton.removeEventListener('click', handleReadyButtonClick)
+        readyButton.classList.remove('submit-button')
+        readyButton.classList.add('disable-button')
+        readyButton.getAttribute === true ? null : button.setAttribute('disabled', true)
+    }
+
+    readyButton.addEventListener('click', handleReadyButtonClick)
 
     const button = document.getElementById('submit')
     

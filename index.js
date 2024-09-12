@@ -169,6 +169,8 @@ io.on('connection', (socket) => {
                 }
                 rooms.push(room)
 
+                socket.join(`room${room.id}`)
+
                 io.to(`room${room.id}`).emit("nuevo-integrante");
 
                 console.log(`${new Date()} - Room creado`)
@@ -177,7 +179,7 @@ io.on('connection', (socket) => {
             rooms.forEach(element => {
                 if(Number(element.id) === Number(data.idPartida)){
                     // socket.emit('info-partida',  element );
-                    io.to(`room${object.id}`).emit('info-partida',  element);
+                    io.to(`room${element.id}`).emit('info-partida',  element);
                 }
 
                 console.log(`Room ${element.id}`, element)

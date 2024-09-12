@@ -77,6 +77,10 @@ h3{
     transition: background-color 0.3s ease;
 }
 
+.play-button:hover {
+    background-color: #218838;
+}
+
 .disable-button {
     background-color: grey;
     color: black;
@@ -85,10 +89,6 @@ h3{
     padding: 10px 20px;
     font-size: 16px;
     cursor: default;
-}
-
-.play-button:hover {
-    background-color: #218838;
 }
 
 /* Ajuste de grilla a 2 columnas cuando el ancho de las tarjetas es menor a 200px */
