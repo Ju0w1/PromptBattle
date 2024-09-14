@@ -3,17 +3,22 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     if(!token) window.location.href = '/login';
 
-    const loader = document.getElementById('loader') 
-    loader.style.display = 'block';
-
     var socket = io();
 
     socket.emit('admin-obtener-partidas')
 
     socket.on('admin-listado-partidas', (rooms) => {
+        console.log('Se activa el listado de admin')
+        const loader = document.getElementById('loader') 
+        loader.style.display = 'block';
+
         const resultContainer = document.getElementById('tabla')
-        loader.style.display = 'none';
-        resultContainer.style.display = 'block';
+
+        const trs = resultContainer.querySelectorAll('tr')
+
+        for (let i = trs.length-1; i > 0; i--) {
+            trs[i].remove()
+        }
 
         if(rooms){
             rooms.forEach(element => {
@@ -84,6 +89,10 @@ document.addEventListener('DOMContentLoaded', async function() {
                 newRow.appendChild(newTipoGanador)
                 newRow.appendChild(newButton)
 
+
+                loader.style.display = 'none';
+                resultContainer.style.display = 'block';
+                
                 resultContainer.appendChild(newRow)
             });
         }else{

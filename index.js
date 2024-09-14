@@ -124,7 +124,7 @@ io.on('connection', (socket) => {
                     if (userIndex !== -1) {
                         console.log(`Eliminando al usuario ${username} de la room ${room.id}`);
                         room.usuarios.splice(userIndex, 1); // Eliminar el usuario de la room
-
+                        io.to('adminRooms').emit('admin-listado-partidas', rooms)
                         io.to(`room${room.id}`).emit("info-partida", room);
                     }
                 });
@@ -189,7 +189,7 @@ io.on('connection', (socket) => {
                     socket.join(`room${object.id}`)
 
                     io.to(`room${object.id}`).emit("nuevo-integrante", object);
-
+                    io.to('adminRooms').emit('admin-listado-partidas', rooms)
                     console.log(`${new Date()} - No esta completa la lista, se agrega el usuario a la lista del room`)
                 }
             }else{
@@ -212,7 +212,7 @@ io.on('connection', (socket) => {
                 socket.join(`room${room.id}`)
 
                 io.to(`room${room.id}`).emit("nuevo-integrante", room);
-
+                io.to('adminRooms').emit('admin-listado-partidas', rooms)
                 console.log(`${new Date()} - Room creado`)
             }    
 
@@ -243,11 +243,12 @@ io.on('connection', (socket) => {
                 })
             }
         })
-        socket.emit('admin-listado-partidas', rooms)
+        io.to('adminRooms').emit('admin-listado-partidas', rooms)
     })
 
     socket.on('admin-obtener-partidas', () => {
-        socket.emit('admin-listado-partidas', rooms)
+        socket.join('adminRooms')
+        io.to('adminRooms').emit('admin-listado-partidas', rooms)
     })
 
     socket.on('obtener-info-partida', (idPartida) =>{
@@ -266,15 +267,6 @@ io.on('connection', (socket) => {
         }
 
     })
-
-    // const buscarValor = (mapa, key, valorBuscado) => {
-    //     for (const [clave, objeto] of mapa) {
-    //       if (objeto[key] === valorBuscado) {
-    //         return { clave, objeto };  // Devuelve el objeto si encuentra coincidencia
-    //       }
-    //     }
-    //     return null;  // Si no encuentra nada
-    // };
 
     socket.on('desconectar', (username) =>{
         users.delete(username)
