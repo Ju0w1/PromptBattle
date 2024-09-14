@@ -24,8 +24,9 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     })  
 
-    socket.on('nuevo-integrante', ()=>{
-        console.log('Se unio alguien al room')
+    socket.on('nuevo-integrante', (room)=>{
+        const cantidadPlayers = document.getElementById("players-count")
+        cantidadPlayers.textContent = `Battlers en la sala: ${room.usuarios.length}`
     })  
 
     socket.on('info-partida', (partida)=>{
@@ -36,6 +37,8 @@ document.addEventListener('DOMContentLoaded', async function() {
         cantidadPlayers.textContent = `Battlers en la sala: ${partida.usuarios.length}`
     })
 
+    socket.emit('obtener-info-partida', idPartida)
+
     const readyButton = document.getElementById('ready-button')
 
     function handleReadyButtonClick() {
@@ -44,7 +47,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         readyButton.removeEventListener('click', handleReadyButtonClick)
         readyButton.classList.remove('submit-button')
         readyButton.classList.add('disable-button')
-        readyButton.getAttribute === true ? null : button.setAttribute('disabled', true)
+        readyButton.getAttribute === true ? null : readyButton.setAttribute('disabled', true)
     }
 
     readyButton.addEventListener('click', handleReadyButtonClick)

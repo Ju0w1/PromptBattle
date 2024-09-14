@@ -86,6 +86,11 @@ app.get('/dashboard/cargartemas', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'crearTemas.html'));
 });
 
+// Ruta para servir la lista de partidas
+app.get('/dashboard/partidas', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'partidas.html'));
+});
+
 // Ruta para servir la partida del jugador
 app.get('/partida', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'partida.html'));
@@ -107,6 +112,24 @@ io.on('connection', (socket) => {
         if (users.has(username)) {
             console.log(`El usuario ${username} ya está conectado`);
             users.get(username).socketId = socket.id
+
+            const referer = socket.handshake.headers.referer;
+            
+            if (referer && referer.includes('/lobby')) {
+                console.log('Usuario conectado desde el lobby, limpiando salas...');
+
+                rooms.forEach((room) => {
+                    const userIndex = room.usuarios.findIndex(user => user.username === username);
+
+                    if (userIndex !== -1) {
+                        console.log(`Eliminando al usuario ${username} de la room ${room.id}`);
+                        room.usuarios.splice(userIndex, 1); // Eliminar el usuario de la room
+
+                        io.to(`room${room.id}`).emit("info-partida", room);
+                    }
+                });
+            }
+
             return;
         }else{
             const newUser = {
@@ -144,24 +167,41 @@ io.on('connection', (socket) => {
             const object = rooms[index]
 
             if(object) {
+                const indice = object.usuarios.findIndex(usuario => usuario.username === username)
+                if(object.usuarios[indice]){
+                    socket.emit('usuario-ya-esta-en-partida', { message: 'El usuario ya se encuentra en la partida' });
+                }else
                 if(object.usuarios.length >= 2){
                     socket.emit('partida-completa', { message: 'Esta partida alcanzo el maximo de jugadores.' });
                         
                     console.log(`${new Date()} - La cantidad de usuarios superan el maximo por lo que se emite partida-completa`)
-                }else{
-                    object.usuarios.push(users.get(username)) 
+                }
+                else{
+                    const user = users.get(username)
+                    const newUser = {
+                        username: user.username,
+                        socketId: user.socketId,
+                        isReady: false
+                    }
+                    object.usuarios.push(newUser) 
                     rooms[index] = object
 
                     socket.join(`room${object.id}`)
 
-                    io.to(`room${object.id}`).emit("nuevo-integrante");
+                    io.to(`room${object.id}`).emit("nuevo-integrante", object);
 
                     console.log(`${new Date()} - No esta completa la lista, se agrega el usuario a la lista del room`)
                 }
             }else{
                 console.log(`${new Date()} - No existe room, se procede a crearlo`)
                 const usuarios = []
-                usuarios.push(users.get(username))
+                const user = users.get(username)
+                const newUser = {
+                    username: user.username,
+                    socketId: user.socketId,
+                    isReady: false
+                }
+                usuarios.push(newUser)
                 const room = {
                     tema: data.tema,
                     usuarios,
@@ -171,7 +211,7 @@ io.on('connection', (socket) => {
 
                 socket.join(`room${room.id}`)
 
-                io.to(`room${room.id}`).emit("nuevo-integrante");
+                io.to(`room${room.id}`).emit("nuevo-integrante", room);
 
                 console.log(`${new Date()} - Room creado`)
             }    
@@ -193,6 +233,49 @@ io.on('connection', (socket) => {
         }
     });
 
+    socket.on('player-ready', (data) => {
+        rooms.forEach(room => {
+            if(Number(room.id) === Number(data.idPartida)){
+                room.usuarios.forEach(usuario => {
+                    if(usuario.username === data.username){
+                        usuario.isReady = true
+                    }
+                })
+            }
+        })
+        socket.emit('admin-listado-partidas', rooms)
+    })
+
+    socket.on('admin-obtener-partidas', () => {
+        socket.emit('admin-listado-partidas', rooms)
+    })
+
+    socket.on('obtener-info-partida', (idPartida) =>{
+        rooms.forEach(room => {
+            if(Number(room.id) === Number(idPartida)){
+                socket.emit('info-partida', room);
+            }
+        })
+    })
+
+    socket.on('disconnect', () => {
+        for (const [clave, objeto] of users){
+            if(objeto['socketId'] === socket.id){
+                console.log('Se desconecto: ', objeto['username'])
+            }
+        }
+
+    })
+
+    // const buscarValor = (mapa, key, valorBuscado) => {
+    //     for (const [clave, objeto] of mapa) {
+    //       if (objeto[key] === valorBuscado) {
+    //         return { clave, objeto };  // Devuelve el objeto si encuentra coincidencia
+    //       }
+    //     }
+    //     return null;  // Si no encuentra nada
+    // };
+
     socket.on('desconectar', (username) =>{
         users.delete(username)
         socket.disconnect()
@@ -204,8 +287,11 @@ io.on('connection', (socket) => {
 function addUser(newUser) {
     const user = {
         username: newUser.username,
-        socketId: newUser.socketId
+        socketId: newUser.socketId,
+        isReady: false,
     };
     users.set(user.username, user); // Usar el username como clave
     return user;
 }
+
+module.exports = rooms;

@@ -52,3 +52,15 @@ document.getElementById('cargarTemas').addEventListener('click', async function(
     }
 });
 
+document.getElementById('verPartidas').addEventListener('click', async function() {
+    try {
+        const token = localStorage.getItem('token');
+
+        if(!token) window.location.href = '/login';
+
+        window.location.href = '/dashboard/partidas';
+    } catch (err) {
+        console.log('Error al cerrar sesión')
+    }
+});
+

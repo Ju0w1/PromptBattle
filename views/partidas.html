@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partidas</title>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <link rel="stylesheet" href="/css/global.styles.css">
+    <link rel="stylesheet" href="/css/partidas.styles.css">
+</head>
+<body>
+    <div class="body-style">
+        <main class="main-container">
+            <div>
+                <h2>Listado de partidas</h2>
+            </div>
+            <div class="loader-container">
+                <div id="loader" class="loader" style="display: none;"></div>
+            </div>
+            <table id="tabla" style="display: none;">
+                <tr id="header-tabla">
+                    <th>ID PARTIDA</th>
+                    <th>TOPICO</th>
+                    <th>JUGADORES LISTOS</th>
+                    <th>TIEMPO</th>
+                    <th>CANTIDAD DE IMAGENES A GENERAR</th>
+                    <th>TIPO DE GANADOR</th>
+                    <th>ACCION</th>
+                </tr>
+                <!-- <tr>
+                    <td>0</td>
+                    <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore est, quas facilis cupiditate sequi veniam dicta quibusdam dolor omnis</td>
+                    <td>1</td>
+                    <td><button>COMENZAR</button></td>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore est, quas facilis cupiditate sequi veniam dicta quibusdam dolor omnis</td>
+                    <td>1</td>
+                    <td><button>COMENZAR</button></td>
+                </tr> -->
+            </table>
+        </main>
+    </div>
+
+    <script src="/js/partidas.script.js"></script>
+</body>
+</html>
