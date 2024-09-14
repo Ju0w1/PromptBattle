@@ -5,6 +5,45 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     var socket = io();
 
+    function handleComenzarButtonClick() {
+        const id = this.getAttribute('data-key');
+    
+        const tr = document.getElementById(id);
+    
+        const tds = tr.querySelectorAll('td');
+    
+        const elem_idPartida = tds[0];
+        
+        const elem_tema = tds[1];
+    
+        const elem_jugadores_listos = tds[2];
+    
+        const players = [];
+        if(elem_jugadores_listos.hasChildNodes()){
+            const p = elem_jugadores_listos.querySelectorAll('p');
+            
+            for (let i = 0; i < p.length; i++) {
+                players.push(p[i].textContent)
+            }
+        }
+    
+        const elem_tiempo = tds[3];
+        const elem_canitdad_imagenes = tds[4];
+        const elem_tipo_ganador = tds[5];
+        
+        const idPartida = elem_idPartida.textContent;
+        const tema = elem_tema.textContent;
+        const jugadoresListos = players;
+        const tiempo = elem_tiempo.querySelector('select').value;
+        const canitdad_imagenes = elem_canitdad_imagenes.querySelector('select').value;
+        const tipo_ganador = elem_tipo_ganador.querySelector('select').value;
+    
+        socket.emit('admin-comenzar-partida', { 
+            idPartida, tema, jugadoresListos, tiempo, canitdad_imagenes, tipo_ganador 
+        });
+    }
+
+
     socket.emit('admin-obtener-partidas')
 
     socket.on('admin-listado-partidas', (rooms) => {
@@ -23,12 +62,15 @@ document.addEventListener('DOMContentLoaded', async function() {
         if(rooms){
             rooms.forEach(element => {
                 const newRow = document.createElement('tr')
+                newRow.id = element.id
 
                 const newIdPartida = document.createElement('td')
                 newIdPartida.textContent = element.id
+                newIdPartida.id = 'idPartida'
 
                 const newTema = document.createElement('td')
                 newTema.textContent = element.tema
+                newTema.id = 'tema'
 
                 const jugadoresListos = document.createElement('td')
                 var cantidadReady = 0
@@ -41,6 +83,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                         jugadoresListos.appendChild(p)
                     }
                 })
+                jugadoresListos.id = 'jugadores-listos'
                 
                 const newTiempo = document.createElement('td')
                 newTiempo.innerHTML = `
@@ -50,6 +93,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                         <option value="3">3 minutos</option>
                     </select>
                 `
+                newTiempo.id = 'tiempo'
 
                 const newCantidadImages = document.createElement('td')
                 newCantidadImages.innerHTML = `
@@ -59,6 +103,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                         <option value="3">3</option>
                     </select>
                 `
+                newCantidadImages.id = 'cantidad-imagenes'
                 
                 const newTipoGanador = document.createElement('td')
                 newTipoGanador.innerHTML = `
@@ -67,14 +112,19 @@ document.addEventListener('DOMContentLoaded', async function() {
                         <option value="publico">Voto público</option>
                     </select>
                 `
+                newTipoGanador.id = 'tipo-ganador'
 
                 const newButton = document.createElement('td')
                 const button = document.createElement('button')
                 button.classList.add('button-tabla')
+                // set key attribbute with the value of the id
+                button.setAttribute('data-key', element.id)
                 if(cantidadReady !== 2){
                     button.classList.remove('button-tabla')
                     button.classList.add('disable-button')
                     button.getAttribute === true ? null : button.setAttribute('disabled', true)
+                }else{
+                    button.addEventListener('click', handleComenzarButtonClick);
                 }
 
                 button.textContent = 'COMENZAR'
@@ -95,6 +145,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 
                 resultContainer.appendChild(newRow)
             });
+            
         }else{
             console.log('Error, no se encontraron rooms')
         }

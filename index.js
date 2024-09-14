@@ -259,6 +259,14 @@ io.on('connection', (socket) => {
         })
     })
 
+    socket.on('admin-comenzar-partida', (partida) =>{
+        rooms.forEach(room => {
+            if(Number(room.id) === Number(partida.idPartida)){
+                io.to(`room${room.id}`).emit('comenzar-partida', room, partida);
+            }
+        })
+    })
+
     socket.on('disconnect', () => {
         for (const [clave, objeto] of users){
             if(objeto['socketId'] === socket.id){
