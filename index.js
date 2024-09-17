@@ -91,6 +91,10 @@ app.get('/dashboard/partidas', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'partidas.html'));
 });
 
+app.get('/dashboard/partidas/:id', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'verPartida.html'));
+});
+
 // Ruta para servir la partida del jugador
 app.get('/partida', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'partida.html'));
@@ -262,7 +266,39 @@ io.on('connection', (socket) => {
     socket.on('admin-comenzar-partida', (partida) =>{
         rooms.forEach(room => {
             if(Number(room.id) === Number(partida.idPartida)){
+                room.jugadoresListos = partida.jugadoresListos
+                room.tiempo = partida.tiempo
+                room.cantidadImagenes = partida.canitdad_imagenes
+                room.tipoGanador = partida.tipo_ganador
+                
                 io.to(`room${room.id}`).emit('comenzar-partida', room, partida);
+
+            }
+        })
+    })
+
+    socket.on('admin-visualizar-partida', (idPartida) =>{
+        console.log("recibbido: ", idPartida)
+        rooms.forEach(room => {
+            if(Number(room.id) === Number(idPartida)){
+                socket.join('adminRooms')
+                io.to(`room${room.id}`).emit('admin-info-partida-en-curso', room)
+            }
+        })
+    })
+
+    socket.on('imagen-generada', (datos) =>{
+        rooms.forEach(room => {
+            if(Number(room.id) === Number(datos.idPartida)){
+                room.usuarios.forEach(usuario => {
+                    if(usuario.username === datos.username){
+                        const images = usuario.imagenes ? usuario.imagenes : [] 
+                        images.push(datos.imagen)
+                        usuario.imagenes = images
+
+                        io.to(`room${room.id}`).emit('admin-info-partida-en-curso', room)
+                    }
+                })
             }
         })
     })

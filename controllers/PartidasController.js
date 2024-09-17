@@ -49,19 +49,6 @@ router.post('/generate', async function(req, res) {
   }
 })
 
-router.post('/lista', function(req, res) {
-  // io.on('connection', function(socket) {
-  //   socket.emit('admin-obtener-partidas')
-    
-  //   socket.on('admin-listado-partidas', (rooms) => {
-  //     console.log('se obtuvieron los rooms del lado admin: ',rooms)
-          
-  //   })
-  // });
-
-  
-  // res.status(200).send(rooms)
-})
 
 
 module.exports = router;

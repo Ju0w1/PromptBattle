@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver partida</title>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <link rel="stylesheet" href="/css/global.styles.css">
+    <link rel="stylesheet" href="/css/verPartida.styles.css">
+</head>
+<body>
+    <main>
+        <h3 id="title"></h3>
+        <div class="container">
+            <!-- Columna izquierda (Usuario 1) -->
+            <div class="left">
+                <h2>Jugador 1</h2>
+                <div class="images-container">
+                    <img src="" alt="Imagen 1" class="generated-image" id="left-img-1">
+                    <img src="" alt="Imagen 2" class="generated-image" id="left-img-2">
+                    <img src="" alt="Imagen 3" class="generated-image" id="left-img-3">
+                </div>
+                <button class="winner-button" id="left-winner-btn">Anunciar Ganador</button>
+            </div>
+    
+            <!-- Columna derecha (Usuario 2) -->
+            <div class="right">
+                <h2>Jugador 2</h2>
+                <div class="images-container">
+                    <img src="" alt="Imagen 1" class="generated-image" id="right-img-1">
+                    <img src="" alt="Imagen 2" class="generated-image" id="right-img-2">
+                    <img src="" alt="Imagen 3" class="generated-image" id="right-img-3">
+                </div>
+                <button class="winner-button" id="right-winner-btn">Anunciar Ganador</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Aquí puedes agregar lógica para generar las imágenes dinámicamente
+        document.getElementById('left-winner-btn').addEventListener('click', () => {
+            alert("Jugador 1 es el ganador!");
+        });
+
+        document.getElementById('right-winner-btn').addEventListener('click', () => {
+            alert("Jugador 2 es el ganador!");
+        });
+    </script>
+
+    <script src="/js/verPartida.script.js"></script>
+</body>
+</html>
