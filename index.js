@@ -278,13 +278,32 @@ io.on('connection', (socket) => {
     })
 
     socket.on('admin-visualizar-partida', (idPartida) =>{
-        console.log("recibbido: ", idPartida)
         rooms.forEach(room => {
             if(Number(room.id) === Number(idPartida)){
                 socket.join('adminRooms')
-                io.to(`room${room.id}`).emit('admin-info-partida-en-curso', room)
+                io.to("adminRooms").emit('admin-info-partida-en-curso', room)
             }
         })
+    })
+
+    socket.on('admin-ganador', (ganador, idPartida) =>{
+        rooms.forEach(room => {
+            if(Number(room.id) === Number(idPartida)){
+                room.ganador = room.usuarios[Number(ganador)].username
+
+                io.to(`room${room.id}`).emit('end-game', room)
+            }
+        })
+    })
+
+    socket.on('terminar-partida', (idPartida) =>{
+        // get room index from rooms of idPartida
+        rooms.forEach((room, index) => {
+            if(Number(room.id) === Number(idPartida)){
+                rooms.splice(index, 1)
+            }
+        })
+        
     })
 
     socket.on('imagen-generada', (datos) =>{
@@ -296,7 +315,7 @@ io.on('connection', (socket) => {
                         images.push(datos.imagen)
                         usuario.imagenes = images
 
-                        io.to(`room${room.id}`).emit('admin-info-partida-en-curso', room)
+                        io.to("adminRooms").emit('admin-info-partida-en-curso', room)
                     }
                 })
             }

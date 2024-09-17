@@ -17,6 +17,38 @@ document.addEventListener('DOMContentLoaded', async function() {
         window.location.href = '/lobby'
     })
 
+    socket.on('end-game', (room)=>{
+        if(Number(room.id) === Number(idPartida)){
+            //show a modal for the winner, for the looser show another modal
+
+            const modal = document.getElementById('modal');
+            const messageElement = document.getElementById('modal-message');
+            const closeButton = document.getElementById('close-btn');
+
+            // Función para mostrar el modal
+            function showModal(isWinner) {
+            if (isWinner) {
+                messageElement.textContent = '¡Has ganado 🎉🎉!';
+            } else {
+                messageElement.textContent = 'Has perdido ❌❌!';
+            }
+
+            // Mostrar el modal
+            modal.classList.add('show');
+            }
+
+            // Cerrar el modal al hacer clic en el botón
+            closeButton.addEventListener('click', () => {
+                modal.classList.remove('show');
+                socket.emit('terminar-partida', idPartida);
+                window.location.href = '/lobby';
+            });
+
+            showModal(room.ganador === name);
+            
+        }
+    })
+
     socket.on('actualizo-cantidad-players', (datos)=>{
         if(Number(datos.idPartida) === idPartida){
             const players = document.getElementById('players-count')
