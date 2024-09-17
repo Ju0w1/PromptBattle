@@ -66,10 +66,11 @@ document.addEventListener('DOMContentLoaded', async function() {
             const cantImagenes = Number(partida.canitdad_imagenes)
             const imagenes = []
 
+            const resultContainer = document.getElementById('result')
             async function handleGenerateImage() {
                 const textoObj = document.getElementById('texto')
                 const texto = textoObj.value
-        
+
                 try{
                     const loader = document.getElementById('loader') 
                     loader.style.display = 'block';
@@ -84,19 +85,19 @@ document.addEventListener('DOMContentLoaded', async function() {
                     const data = await response.json()
         
                     if(response.status === 200 && data){
-                        const imagen = document.getElementById('imagen')
-                        imagen.src=data.image
+                        const img = document.createElement('img')
+                        img.src = data.image
+                        resultContainer.appendChild(img)
                         imagenes.push(data.image)
-                        socket.emit('imagen-generada', { imagen: data.image })
+                        socket.emit('imagen-generada', { imagen: data.image, username: name, idPartida });
                     }else{
                         console.log('Error al generar imagen');
                     }
                 }catch(error){
                     console.log(error)
                 }finally{
-                    const resultContainer = document.getElementById('result')
                     loader.style.display = 'none';
-                    resultContainer.style.display = 'block';
+                    resultContainer.style.display = 'flex';
                 }
             }
 

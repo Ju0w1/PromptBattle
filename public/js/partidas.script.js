@@ -5,6 +5,10 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     var socket = io();
 
+    function handleVisualizarButtonClick(){
+        window.location.href = `/dashboard/partidas/${this.getAttribute('data-key-view')}`
+    }
+
     function handleComenzarButtonClick() {
         const id = this.getAttribute('data-key');
     
@@ -41,6 +45,8 @@ document.addEventListener('DOMContentLoaded', async function() {
         socket.emit('admin-comenzar-partida', { 
             idPartida, tema, jugadoresListos, tiempo, canitdad_imagenes, tipo_ganador 
         });
+
+        this.remove()
     }
 
 
@@ -130,6 +136,18 @@ document.addEventListener('DOMContentLoaded', async function() {
                 button.textContent = 'COMENZAR'
 
                 newButton.appendChild(button)
+
+                ////////////////////////////
+
+                const buttonView = document.createElement('button')
+                
+                buttonView.setAttribute('data-key-view', element.id)
+                buttonView.classList.add('button-tabla-blue')
+                buttonView.addEventListener('click', handleVisualizarButtonClick);
+
+                buttonView.textContent = 'VISUALIZAR'
+
+                newButton.appendChild(buttonView)
 
                 newRow.appendChild(newIdPartida)
                 newRow.appendChild(newTema)
