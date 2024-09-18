@@ -100,7 +100,7 @@ app.get('/partida', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'partida.html'));
 });
 
-let port = 3500;
+let port = process.env.PORT;
 server.listen(port, () => {
 	console.log('Servidor arriba');
 });
