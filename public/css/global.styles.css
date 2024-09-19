@@ -1,14 +1,15 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #e0e7ff;
-
+    margin: 0;
+    height: 100vh;
 }
 
 .body-style{
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 85%;
     margin: 0;
 }
 
@@ -100,3 +101,55 @@ button {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+footer {
+    background-color: #222;
+    color: #fff;
+    padding: 20px 0;
+  }
+  
+  .footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  .footer-left, .footer-center, .footer-right {
+    flex: 1;
+    text-align: center;
+  }
+  
+  .footer-left {
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .footer-right {
+    text-align: right;
+  }
+  
+  p {
+    margin: 0;
+  }
+  
+  .icon-circle {
+    width: 40px;
+    height: 40px;
+    background-color: #1e73be;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .icon-circle span {
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
