@@ -1,16 +1,16 @@
+.page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
 
-
-main {
+.main-content {
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 2rem 2rem 0rem 2rem;
-    height: 75%;
-}
-
-h2 {
-    margin: 0;
-    font-size: 2rem;
+    padding: 2rem;
+    overflow-y: auto;
 }
 
 #tema {
@@ -19,34 +19,43 @@ h2 {
     text-align: center;
 }
 
+#players-count-container {
+    margin-bottom: 1rem;
+}
+
+#ready-container {
+    margin-bottom: 2rem;
+}
+
+.loader-container {
+    margin-bottom: 2rem;
+}
+
 .image-container {
     max-width: 100%;
-    height: 400px;
     margin-bottom: 2rem;
     display: flex;
     flex-direction: row;
-    align-items: center;
     justify-content: center;
     gap: 1rem;
     flex-wrap: wrap;
 }
 
 .image-container img {
-    max-width: 40%;
+    max-width: 45%;
     height: auto;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .input-container {
-    display: flex;
-    justify-content: center;
     width: 100%;
+    max-width: 400px;
+    margin-bottom: 1rem;
 }
 
 .input-container input {
     width: 100%;
-    max-width: 400px;
     padding: 0.75rem;
     font-size: 1rem;
     border: 1px solid #ddd;
@@ -54,15 +63,7 @@ h2 {
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.input-container input:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-}
-
-/* Button styles (if you decide to add a submit button) */
 .submit-button {
-    margin-top: 2rem;
     padding: 0.75rem 1.5rem;
     font-size: 1rem;
     color: #fff;
@@ -72,14 +73,11 @@ h2 {
     cursor: pointer;
     transition: background-color 0.3s;
     width: 20rem;
+    margin-bottom: 2rem;
 }
 
 .submit-button:hover {
     background-color: #0056b3;
-}
-
-.blue-button{
-    width: 50%;
 }
 
 .modal {
@@ -88,15 +86,16 @@ h2 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8); /* Oscurece el fondo */
+    background-color: rgba(0, 0, 0, 0.8);
     display: flex;
     justify-content: center;
     align-items: center;
     visibility: hidden;
-  }
-  
-  .modal-content {
-    background-color: #1f1f1f; /* Fondo oscuro del modal */
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #1f1f1f;
     padding: 20px;
     border-radius: 10px;
     text-align: center;
@@ -104,30 +103,45 @@ h2 {
     max-width: 400px;
     width: 100%;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-  }
-  
-  h4 {
+}
+
+.modal h4 {
     font-size: 2rem;
     margin-bottom: 20px;
-    color: white !important;
-  }
-  
-  button {
-    background-color: #4caf50; /* Color verde */
+    color: white;
+}
+
+.modal button {
+    background-color: #4caf50;
     color: white;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 1rem;
-  }
-  
-  button:hover {
+}
+
+.modal button:hover {
     background-color: #45a049;
-  }
-  
-  /* Mostrar el modal cuando sea necesario */
-  .modal.show {
+}
+
+.modal.show {
     visibility: visible;
-    z-index: 1000;
-  }
+}
+
+footer {
+    margin-top: auto;
+    padding: 20px 0;
+    background-color: #222;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .submit-button {
+        width: 100%;
+    }
+
+    .image-container img {
+        max-width: 100%;
+    }
+}

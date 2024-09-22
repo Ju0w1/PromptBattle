@@ -33,6 +33,7 @@
     background-color: #c82333;
 }
 
-.main-container{
-    width: 30vw;
+.main-content{
+    margin-inline: 30%;
 }
+

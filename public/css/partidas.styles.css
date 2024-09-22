@@ -66,8 +66,12 @@ td {
     background-color: #0059ff;
 }
 
+.main-content {
+    margin-inline: 20px;
+}
+
 @media (max-width: 768px) {
-    .main-container {
+    .main-content {
         width: 95%;
         padding: 1rem;
     }

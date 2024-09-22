@@ -1,6 +1,6 @@
 
-.main-container{
-    width: 60vw;
+.main-content{
+    margin-inline: 20%;
 }
 
 /* Estilos del formulario */
@@ -12,6 +12,11 @@ form {
 
 .form-group {
     margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+    align-items: center;
+    justify-content: space-between;
 }
 
 /* Estilos del select */

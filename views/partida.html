@@ -9,59 +9,55 @@
     <link rel="stylesheet" href="/css/partida.styles.css">
 </head>
 <body>
-    <header>
-        <h2>Partida</h2>
-    </header>
-    <main>
-        <h3 id="tema"></h3>
+    <div class="page-container">
+        <header>
+            <h2>Partida</h2>
+        </header>
+        <main class="main-content">
+            <h3 id="tema"></h3>
 
-        <div id="players-count-container">
-            <p id="players-count">Battlers en la sala: 0</p>
-        </div>
-
-        <!-- Botón de "Listo" -->
-        <div id="ready-container">
-            <button id="ready-button" class="submit-button">Listo</button>
-        </div>
-
-        <!-- Loader o imagen generada por IA -->
-        <div class="loader-container">
-            <div id="loader" class="loader" style="display: none;"></div>
-        </div>
-        <div class="image-container" id="result" style="display: none;">
-            <!-- <img id="imagen" src="#" alt="Imagen generada por IA"> -->
-        </div>
-
-        <!-- Add the modal here -->
-        <div class="modal" id="modal" display="none">
-            <div class="modal-content">
-              <h4 id="modal-message"></h4>
-              <button id="close-btn">Cerrar</button>
+            <div id="players-count-container">
+                <p id="players-count">Battlers en la sala: 0</p>
             </div>
-          </div>
 
-        <!-- Input y botón Enviar (Ocultos al inicio) -->
-        <div class="input-container" id="input-container" style="display: none;">
-            <input id="texto" type="text" placeholder="Escribe tu texto aquí">
-        </div>
-        <button id="submit" class="submit-button" style="display: none;">Enviar</button>
-    </main>
-    <footer>
-        <div class="footer-container">
-          <div class="footer-left">
-            <div class="icon-circle">
-              <span>&lt;/&gt;</span>
+            <div id="ready-container">
+                <button id="ready-button" class="submit-button">Listo</button>
             </div>
-            <p>Tecnólogo en informática</p>
-          </div>
-          <div class="footer-center">
-            <p><b>PromptBattle by</b> Juan Pablo Peculio 💻</p>
-          </div>
-          <div class="footer-right">
-            <p>2024</p>
-          </div>
-        </div>
-    </footer>
+
+            <div class="loader-container">
+                <div id="loader" class="loader" style="display: none;"></div>
+            </div>
+            <div class="image-container" id="result" style="display: none;"></div>
+
+            <div class="input-container" id="input-container" style="display: none;">
+                <input id="texto" type="text" placeholder="Escribe tu texto aquí">
+            </div>
+            <button id="submit" class="submit-button" style="display: none;">Enviar</button>
+
+            <div class="modal" id="modal">
+                <div class="modal-content">
+                    <h4 id="modal-message"></h4>
+                    <button id="close-btn">Cerrar</button>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <div class="footer-container">
+                <div class="footer-left">
+                    <div class="icon-circle">
+                        <span>&lt;/&gt;</span>
+                    </div>
+                    <p>Tecnólogo en informática</p>
+                </div>
+                <div class="footer-center">
+                    <p><b>PromptBattle by</b> Juan Pablo Peculio 💻</p>
+                </div>
+                <div class="footer-right">
+                    <p>2024</p>
+                </div>
+            </div>
+        </footer>
+    </div>
     <script src="/js/partida.script.js"></script>
 </body>
 </html>

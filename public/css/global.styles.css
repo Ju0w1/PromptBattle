@@ -1,8 +1,45 @@
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #e0e7ff;
+html, body {
+    height: 100%;
     margin: 0;
-    height: 100vh;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #e0e7ff;
+}
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header {
+    background-color: #fff;
+    padding-inline: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.main-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: white;
+    border-radius: 8px;
+}
+
+footer {
+    background-color: #222;
+    color: #fff;
+    padding: 20px 0;
+    margin-top: auto;
 }
 
 .body-style{
@@ -13,14 +50,6 @@ body {
     margin: 0;
 }
 
-.main-container {
-    background-color: #ffffff;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    /* max-width: 400px; */
-}
 
 h2 {
     margin-bottom: 30px;
@@ -102,11 +131,7 @@ button {
     100% { transform: rotate(360deg); }
 }
 
-footer {
-    background-color: #222;
-    color: #fff;
-    padding: 20px 0;
-  }
+
   
   .footer-container {
     display: flex;
@@ -115,6 +140,7 @@ footer {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
+    
   }
   
   .footer-left, .footer-center, .footer-right {

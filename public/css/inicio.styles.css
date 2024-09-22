@@ -36,6 +36,6 @@ input[type="text"]:focus {
     }
 }
 
-.main-container{
-    width: 30vw;
+.main-content{
+    margin-inline: 30%;
 }

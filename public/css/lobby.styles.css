@@ -12,17 +12,20 @@ header{
     align-items: center;
 }
 
-h3{
-    margin-right: 30px;
-    font-size: 16px;
-    color: #333;
+
+.main-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
-.top-right{
+.top-right {
     display: flex;
     align-items: center;
-    justify-content: right;
-    width: 40%;
+}
+
+.top-right h3 {
+    margin-right: 15px;
 }
 
 .red-button{
@@ -49,7 +52,7 @@ h3{
 /* Contenedor de la grilla */
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
 }
 
@@ -104,5 +107,18 @@ h3{
 @media (max-width: 600px) {
     .grid-container {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .top-right {
+        width: 100%;
+        justify-content: space-between;
+        margin-top: 15px;
     }
 }
