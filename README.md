@@ -32,21 +32,27 @@ Asegúrate de tener instalados los siguientes:
   ```bash
   git clone https://github.com/Ju0w1/PromptBattle.git
   ```
-   
+
 2. Instala las dependencias:
   ```bash
   cd PromptBattle
   npm install
   ```
 
-3. Configuracion del archivo .env utilizando de referencia .envexample
+3. Crear carpetas /public/images y /sessions:
+  ```bash
+  mkdir /public/images
+  mkdir /sessions
+  ```
 
-3. Inicia el servidor:
+4. Configuracion del archivo .env utilizando de referencia .envexample
+
+5. Inicia el servidor:
   ```bash
   npm start
   ```
 
-4. Visita la aplicación en http://localhost:3000.
+6. Visita la aplicación en http://localhost:[port].
 
 
 
