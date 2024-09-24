@@ -6,6 +6,7 @@ router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 const url = require('url');
 const fs = require('fs');
+var Partida = require('../models/partida.model');
 
 router.post('/generate', async function(req, res) {
     try{
@@ -51,7 +52,37 @@ router.post('/generate', async function(req, res) {
   }
 })
 
+router.post('/guardar', async function(req, res) {
+  try{
+    const room = req.body.room;
+    const tema = room.tema;
+    const jugadores = room.jugadoresListos;
+    const imagenes = []
+    imagenes.push(room.usuarios[0].imagenes)
+    imagenes.push(room.usuarios[1].imagenes)
+    const tiempo = Number(room.tiempo);
+    const cantidadImagenes = Number(room.cantidadImagenes);
+    const ganador = room.ganador;
 
+    const newPartida = new Partida({
+      _id: new mongoose.Types.ObjectId(),
+
+      tema: tema,
+      jugadores: jugadores,
+      imagenes: imagenes,
+      tiempo: tiempo,
+      cantidadImagenes: cantidadImagenes,
+      ganador: ganador,
+    })
+    
+    await newPartida.save()
+    res.status(200).send({message:'Partida guardada'})
+    
+  }catch (err) {
+    res.status(500).send("Error al guardar tema"+err)
+    console.log(err)
+  }
+})
 
 module.exports = router;
 

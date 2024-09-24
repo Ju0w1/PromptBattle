@@ -292,6 +292,22 @@ io.on('connection', (socket) => {
                 room.ganador = room.usuarios[Number(ganador)].username
 
                 io.to(`room${room.id}`).emit('end-game', room)
+                try{
+                    const baseUrl = `http://${socket.handshake.headers.host}`;
+                    fetch(`${baseUrl}/partidas/guardar`, {
+                        body: JSON.stringify({room}),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        method: 'POST'
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            console.log(data)
+                        })
+                }catch(err){
+                    console.log(err)
+                }   
             }
         })
     })

@@ -1,6 +1,6 @@
 {
   "name": "promptbattlebypablopeculio",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Este es un juego de batalla de prompts creado para carrera Tecnologo en Informatica por Pablo Peculio",
   "main": "index.js",
   "scripts": {
