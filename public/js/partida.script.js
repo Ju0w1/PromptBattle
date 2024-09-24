@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify({ texto }),
+                        body: JSON.stringify({ texto, name, idPartida }),
                     })
         
                     const data = await response.json()

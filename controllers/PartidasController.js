@@ -10,6 +10,8 @@ const fs = require('fs');
 router.post('/generate', async function(req, res) {
     try{
       const texto = req.body.texto;
+      const name = req.body.name;
+      const idPartida = req.body.idPartida;
 
       if(!texto) res.status(500).send("Error al crear tema"+err)
 
@@ -31,9 +33,9 @@ router.post('/generate', async function(req, res) {
       
       const timestamp = new Date().toISOString().replace(/[-:.]/g, '').slice(0, 14);
 
-      const outputPath = `./public/images/image_${timestamp}.png`;
+      const outputPath = `./public/images/image_${idPartida}_${name}_${timestamp}.png`;
 
-      const imagePath = `/images/image_${timestamp}.png`;
+      const imagePath = `/images/image_${idPartida}_${name}_${timestamp}.png`;
 
       fs.writeFile(outputPath, buffer, (error) => {
         if(error){
