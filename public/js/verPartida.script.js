@@ -20,6 +20,15 @@ document.addEventListener('DOMContentLoaded', async function() {
         socket.emit('admin-ganador', 1, partidaId)
     })
 
+    socket.on('actualizo-texto', (data)=>{
+        if(Number(data.idPartida) === Number(partidaId)){
+            const targetElement = Array.from(document.querySelectorAll('.player-column')).find(el => el.textContent.includes(`${data.username}`));
+
+            const nearbyElement = targetElement ? targetElement.querySelector('.prompt') : null;
+
+            nearbyElement.textContent = ': '+data.texto;
+        }
+    })
     
 
     socket.on('admin-info-partida-en-curso', (room)=>{

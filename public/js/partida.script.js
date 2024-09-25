@@ -92,6 +92,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             const readyButton = document.getElementById('ready-container')
             const submitButton = document.getElementById('submit')
             const inputContainer = document.getElementById('input-container')
+            const textoInput = document.getElementById('texto')
             
             var tiempo = partida.tiempo * 60; // convert minutes to seconds
 
@@ -161,6 +162,12 @@ document.addEventListener('DOMContentLoaded', async function() {
             
             inputContainer.style.display = 'flex'
             submitButton.style.display = 'block'
+
+            textoInput.addEventListener('input', () => {
+                const textoEscrito = textoInput.value;
+                
+                socket.emit('texto-escrito', { texto: textoEscrito, username: name, idPartida });
+            });
         }
     })
 });

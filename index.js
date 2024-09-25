@@ -338,6 +338,15 @@ io.on('connection', (socket) => {
         })
     })
 
+    socket.on('texto-escrito', (data) => {
+        rooms.forEach(room => {
+            if(Number(room.id) === Number(data.idPartida)){
+                io.to("adminRooms").emit('actualizo-texto', data)
+                console.log(data)
+            }
+        })
+    })
+
     socket.on('disconnect', () => {
         for (const [clave, objeto] of users){
             if(objeto['socketId'] === socket.id){
