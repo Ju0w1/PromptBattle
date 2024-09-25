@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     socket.on('comenzar-partida', async (room, partida) => {
         if(Number(room.id) === Number(idPartida)){
-
+            const playersCountContainer = document.getElementById('players-count-container')
             const playersCount = document.getElementById('players-count')
             const readyButton = document.getElementById('ready-container')
             const submitButton = document.getElementById('submit')
@@ -98,6 +98,12 @@ document.addEventListener('DOMContentLoaded', async function() {
 
             const cantImagenes = Number(partida.canitdad_imagenes)
             const imagenes = []
+
+            // create new element p with text content
+
+            const cantidadImagenes =  document.createElement('p')
+            cantidadImagenes.textContent = `Cantidad de imágenes a generar: ${cantImagenes}`
+            playersCountContainer.appendChild(cantidadImagenes)
 
             const resultContainer = document.getElementById('result')
             async function handleGenerateImage() {

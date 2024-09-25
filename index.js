@@ -342,7 +342,6 @@ io.on('connection', (socket) => {
         rooms.forEach(room => {
             if(Number(room.id) === Number(data.idPartida)){
                 io.to("adminRooms").emit('actualizo-texto', data)
-                console.log(data)
             }
         })
     })
