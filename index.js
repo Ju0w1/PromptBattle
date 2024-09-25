@@ -293,7 +293,7 @@ io.on('connection', (socket) => {
 
                 io.to(`room${room.id}`).emit('end-game', room)
                 try{
-                    const baseUrl = `http://${socket.handshake.headers.host}`;
+                    const baseUrl = `${process.env.SECURE}://${socket.handshake.headers.host}`;
                     fetch(`${baseUrl}/partidas/guardar`, {
                         body: JSON.stringify({room}),
                         headers: {
