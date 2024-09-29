@@ -56,22 +56,22 @@ router.post('/guardar', async function(req, res) {
   try{
     const room = req.body.room;
     const tema = room.tema;
-    const jugadores = room.jugadoresListos;
-    const imagenes = []
-    imagenes.push(room.usuarios[0].imagenes)
-    imagenes.push(room.usuarios[1].imagenes)
-    const tiempo = Number(room.tiempo);
-    const cantidadImagenes = Number(room.cantidadImagenes);
-    const ganador = room.ganador;
+    const jugadores = [
+      `${room.usuarios[0].username}, votos: ${room.usuarios[0].votos ? room.usuarios[0].votos.toString() : ''}, imagenes: ${room.usuarios[0].imagenes ? room.usuarios[0].imagenes.join(";") : ''}`,
+      `${room.usuarios[1].username}, votos: ${room.usuarios[1].votos ? room.usuarios[1].votos.toString() : ''}, imagenes: ${room.usuarios[1].imagenes ? room.usuarios[1].imagenes.join(";") : ''}`
+    ]
+    const tiempo = Number(room.tiempo)
+    const cantidadImagenes = Number(room.cantidadImagenes)
+    const ganador = room.ganador
+    const tipoEleccionGanador = room.tipoGanador
 
     const newPartida = new Partida({
       _id: new mongoose.Types.ObjectId(),
-
       tema: tema,
-      jugadores: jugadores,
-      imagenes: imagenes,
+      jugadores,
       tiempo: tiempo,
       cantidadImagenes: cantidadImagenes,
+      tipoEleccionGanador,
       ganador: ganador,
     })
     

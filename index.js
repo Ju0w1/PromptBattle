@@ -95,6 +95,14 @@ app.get('/dashboard/partidas/:id', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'verPartida.html'));
 });
 
+app.get('/votaciones/listado', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'listadoPartidas.html'));
+});
+
+app.get('/votaciones/partida/:id', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'votarPartida.html'));
+});
+
 // Ruta para servir la partida del jugador
 app.get('/partida', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'partida.html'));
@@ -285,6 +293,98 @@ io.on('connection', (socket) => {
             }
         })
     })
+
+    socket.on('publico-partidas-para-votar', ()=>{
+        rooms.forEach(room => {
+            if(room.tipoGanador === 'publico'){
+                if(room.finalizada === true && room.ganador === undefined ){
+                    io.emit('fin-partida-comienza-votacion', room)
+                }
+            }
+        })
+    })
+
+    socket.on('fin-partida', async (idPartida) =>{
+        rooms.forEach((room, index) => {
+            if(Number(room.id) === Number(idPartida)){
+                if(room.tipoGanador === 'publico' && room.finalizada === undefined && room.ganador === undefined){
+                    room.finalizada = true
+                    io.emit('fin-partida-comienza-votacion', room)
+
+                    var tiempo = 0.5 * 60
+                    var countdown = setInterval(() => {
+                        const seconds = tiempo % 60;
+                        if (tiempo < 0) {
+                            clearInterval(countdown)
+
+                            if(room.usuarios[0].votos === room.usuarios[1].votos){
+                                const jugadorGanador = room.usuarios[Math.floor(Math.random() * 2)]
+                                room.ganador = jugadorGanador.username
+                            }else{
+                                const jugadorGanador = room.usuarios.reduce((max, jugador) => {
+                                    return (jugador.votos > max.votos) ? jugador : max;
+                                });
+                                room.ganador = jugadorGanador.username
+                            }
+                            io.to(`room${room.id}`).emit('end-game', room)
+
+                            io.emit('fin-votacion', room)
+
+                            try{
+                                const baseUrl = process.env.IS_PROD = 1 ? `http://localhost:${process.env.PORT}` : `http://${socket.handshake.headers.host}`
+                                console.log(baseUrl)
+                                fetch(`${baseUrl}/partidas/guardar`, {
+                                    body: JSON.stringify({room}),
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    method: 'POST'
+                                })
+                                    .then(res => res.json())
+                                    .then(data => {
+                                        console.log(data)
+                                        room.votacionFinalizada = true
+                                    })
+                            }catch(err){
+                                console.log(err)
+                            }
+                        }else{
+                            io.emit('tiempo-votacion', {idPartida, seconds});
+                        }
+                        tiempo--;
+                    }, 1000);
+                }
+            }
+        })
+    })
+
+    socket.on('fin-partida-comienza-votacion', (room)=>{
+        rooms.forEach(room => {
+            if(Number(room.id) === Number(room.id)){
+                console.log('fin-partida-comienza-votacion')
+            }
+        })
+    })
+
+    socket.on('obtener-datos-partida-votacion', (idPartida)=>{
+        rooms.forEach(room => {
+            if(Number(room.id) === Number(idPartida)){
+                io.emit('datos-partida-votacion', room)
+            }
+        })
+    })
+
+    socket.on('voto-partida', (data)=>{
+        rooms.forEach(room => {
+            if(Number(room.id) === Number(data.idPartida)){
+                room.usuarios[data.jugador].votos = (room.usuarios[data.jugador].votos || 0) + 1;
+                io.emit('actualizar-votos', {idPartida: data.idPartida, jugadores:  room.usuarios})
+                // console.log('VOTACION: ', room.usuarios)
+            }
+        })
+    })
+
+    
 
     socket.on('admin-ganador', (ganador, idPartida) =>{
         rooms.forEach(room => {

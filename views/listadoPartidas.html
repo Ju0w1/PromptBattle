@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de partidas para votar</title>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <link rel="stylesheet" href="/css/global.styles.css">
+    <link rel="stylesheet" href="/css/listadoPartidas.styles.css">
+</head>
+  <body>
+      <div class="page-container">
+          <header>
+              <h2>Listado de partidas para votar</h2>
+          </header>
+          <main class="main-content">
+                <div class="loader-container">
+                    <div id="loader" class="loader" style="display: none;"></div>
+                </div>
+              <div id="grid-container" class="grid-container" style="display: none;">
+                  <!-- Aquí irían tus tarjetas de partida -->
+              </div>
+          </main>
+          <footer>
+              <div class="footer-container">
+                  <div class="footer-left">
+                      <div class="icon-circle">
+                          <span>&lt;/&gt;</span>
+                      </div>
+                      <p>Tecnólogo en informática</p>
+                  </div>
+                  <div class="footer-center">
+                      <p><b>PromptBattle by</b> Juan Pablo Peculio 💻</p>
+                  </div>
+                  <div class="footer-right">
+                      <p>2024</p>
+                  </div>
+              </div>
+          </footer>
+      </div>
+      <script src="/js/listadoPartidas.script.js"></script>
+  </body>
+</html>

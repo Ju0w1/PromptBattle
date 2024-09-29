@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     inputContainer.style.display = 'none'
                     submitButton.style.display = 'none'
 
-                    socket.emit('fin-partida', );
+                    socket.emit('fin-partida', idPartida);
                 }else{
 
                     if(cantImagenes === imagenes.length){
