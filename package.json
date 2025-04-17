@@ -4,7 +4,7 @@
   "description": "Este es un juego de batalla de prompts creado para carrera Tecnologo en Informatica por Pablo Peculio",
   "main": "index.js",
   "scripts": {
-    "start": "node --env-file=.env index.js",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Juan Pablo Peculio",
@@ -21,5 +21,8 @@
     "node-fetch": "^3.3.2",
     "session-file-store": "^1.5.0",
     "socket.io": "^4.7.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
