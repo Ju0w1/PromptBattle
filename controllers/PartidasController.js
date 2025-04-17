@@ -34,7 +34,7 @@ router.post('/generate', async function(req, res) {
       
       const timestamp = new Date().toISOString().replace(/[-:.]/g, '').slice(0, 14);
 
-      const outputPath = `./public/images/image_${idPartida}_${name}_${timestamp}.png`;
+      const outputPath = `/tmp/images/image_${idPartida}_${name}_${timestamp}.png`;
 
       const imagePath = `/images/image_${idPartida}_${name}_${timestamp}.png`;
 

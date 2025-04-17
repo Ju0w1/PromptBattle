@@ -15,7 +15,9 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 
-const fileStoreOptions = {};
+const fileStoreOptions = {
+  path: '/tmp/sessions'  // Cambia la ruta de las sesiones a /tmp
+};
 
 const sessionMiddleware = session({
     store: new FileStore(fileStoreOptions),
